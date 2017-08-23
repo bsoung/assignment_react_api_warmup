@@ -5,10 +5,6 @@ const UserCard = ({ user }) => {
 
   console.log(first_name, last_name, "get here?");
 
-  // Set the CSS max-width attribute directly in the
-  // element. `style` accepts a JS object and the
-  // attributes use camelcase. See docs for more info.
-  // Also using new card class for Bootstrap 4.
   return (
     <div className="UserCard card" style={{ maxWidth: `128px` }}>
       <img

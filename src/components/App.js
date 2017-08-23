@@ -15,7 +15,7 @@ class App extends Component {
   componentDidMount() {
     this.setState({ isFetching: true });
 
-    fetch("https://reqres.in/api/users?delay=3")
+    fetch("https://reqres.in/api/users")
       .then(response => response.json())
       .then(json => {
         console.log(json, "?????");
@@ -28,12 +28,22 @@ class App extends Component {
 
   onDelete = index => {
     let copy = [...this.state.users];
-
+    
     copy = copy.filter(u => copy[index] !== u);
 
     this.setState({
       users: copy
     });
+
+    fetch(`https://reqres.in/api/users/${index}`, {method:"delete"})
+      .then(response => {
+        console.log(response)
+      })
+      // .then(json => {return json
+      // })
+      .catch(e=>{
+        console.error(e.stack)
+      });
   };
 
   render() {

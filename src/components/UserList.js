@@ -6,12 +6,9 @@ const UserList = ({ users, isFetching, onDelete }) => {
     onDelete(index);
   };
 
-  const userList = users.map(user => <UserCard user={user} key={user.id} />);
+  const userList = users.map((user, index) => <div key={user.id}><UserCard user={user} key={user.id} /><a onClick={onClickDelete.bind(this, index)}>delete</a></div>);
 
-  console.log(userList, "userList");
 
-  // card-group is the layout wrapper for Bootstrap
-  // 4 cards
   return (
     <div className="container">
       <h1>User List</h1>

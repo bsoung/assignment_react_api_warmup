@@ -1,9 +1,7 @@
 import React from "react";
 
-const UserCard = ({ user, editFlag, selectedUserID }) => {
+const UserCard = ({ user, editFlag}) => {
   const { first_name, last_name, avatar, id } = user;
-
-  console.log(first_name, last_name, "get here?");
 
   return (
     <div className="UserCard card" style={{ maxWidth: `128px` }}>

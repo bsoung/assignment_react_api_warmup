@@ -7,7 +7,6 @@ class App extends Component {
     super();
     this.state = {
       users: [],
-      selectedUserID: null,
       editFlag: 0,
       isFetching: false
     };
@@ -52,25 +51,42 @@ class App extends Component {
 
     let user = copy[index];
 
-    console.log(user, "????");
+    console.log("App.js line 55: user: ", user,"editFlag: ", this.state.editFlag, "userId: ", user.id);
 
     this.setState({
-      editFlag: 1,
-      selectedUserID: user.id
+      editFlag: user.id
     });
   };
 
+  onFetchEdit = index => {
+
+    fetch(`https://reqres.in/api/users/${index}`, { method: "put" })
+      .then(response => {
+        if (response.status === 200) {
+          response.json()
+        }
+      })
+      .then(json => {
+        this.setState({
+            users: json.data
+          });
+      })
+      .catch(e => {
+        console.error(e.stack);
+      });
+  }
+
   render() {
-    const { users, isFetching, editFlag, selectedUserID } = this.state;
+    const { users, isFetching, editFlag } = this.state;
     return (
       <div className="App">
         <UserList
           users={users}
-          selectedUserID={selectedUserID}
           isFetching={isFetching}
           editFlag={editFlag}
           onDelete={this.onDelete}
           onEdit={this.onEdit}
+          onFetchEdit={this.onFetchEdit}
         />
       </div>
     );

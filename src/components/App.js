@@ -8,7 +8,8 @@ class App extends Component {
     this.state = {
       users: [],
       editFlag: 0,
-      isFetching: false
+      isFetching: false,
+      updatedAt: null
     };
   }
 
@@ -18,7 +19,6 @@ class App extends Component {
     fetch("https://reqres.in/api/users")
       .then(response => response.json())
       .then(json => {
-        console.log(json, "?????");
         this.setState({
           users: json.data,
           isFetching: false
@@ -26,7 +26,7 @@ class App extends Component {
       });
   }
 
-  onDelete = index => {
+  remove = index => {
     let copy = [...this.state.users];
 
     copy = copy.filter(u => copy[index] !== u);
@@ -39,6 +39,7 @@ class App extends Component {
           this.setState({
             users: copy
           });
+          alert("User deleted!");
         }
       })
       .catch(e => {
@@ -46,35 +47,41 @@ class App extends Component {
       });
   };
 
-  onEdit = index => {
+  edit = index => {
     let copy = [...this.state.users];
 
     let user = copy[index];
-
-    console.log("App.js line 55: user: ", user,"editFlag: ", this.state.editFlag, "userId: ", user.id);
 
     this.setState({
       editFlag: user.id
     });
   };
 
-  onFetchEdit = index => {
+  fetchEdit = (index, e) => {
+    let copy = [...this.state.users];
+
+    let user = copy[index];
 
     fetch(`https://reqres.in/api/users/${index}`, { method: "put" })
-      .then(response => {
-        if (response.status === 200) {
-          response.json()
+      .then(res => {
+        if (res.status !== 200) {
+          throw new Error(res.status);
         }
+
+        return res.json();
       })
       .then(json => {
+        console.log(json.updatedAt, "??");
         this.setState({
-            users: json.data
-          });
+          updatedAt: json.updatedAt,
+          users: copy
+        });
+        alert(`Updated at ${this.state.updatedAt}!`);
       })
       .catch(e => {
         console.error(e.stack);
       });
-  }
+  };
 
   render() {
     const { users, isFetching, editFlag } = this.state;
@@ -84,9 +91,9 @@ class App extends Component {
           users={users}
           isFetching={isFetching}
           editFlag={editFlag}
-          onDelete={this.onDelete}
-          onEdit={this.onEdit}
-          onFetchEdit={this.onFetchEdit}
+          remove={this.remove}
+          edit={this.edit}
+          fetchEdit={this.fetchEdit}
         />
       </div>
     );

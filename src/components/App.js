@@ -1,44 +1,58 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 //import JumbotronFluid from './elements/JumbotronFluid'
-import UserList from './UserList'
+import UserList from "./UserList";
 
 class App extends Component {
   constructor() {
-    super()
-    this.state={
+    super();
+    this.state = {
       users: [],
-      isFetching: false,
-    }
+      deleteFlag: 0,
+      isFetching: false
+    };
   }
 
+  componentDidMount() {
+    this.setState({ isFetching: true });
 
-componentDidMount() {
-    this.setState({isFetching: true})
-
-    fetch('https://reqres.in/api/users?delay=3')
-      .then((response) => response.json())
-      .then((json) => {
+    fetch("https://reqres.in/api/users?delay=3")
+      .then(response => response.json())
+      .then(json => {
+        console.log(json, "?????");
         this.setState({
           users: json.data,
-          isFetching: false,
-        })
-      })
+          isFetching: false
+        });
+      });
   }
 
+  onDelete = index => {
+    let copy = [...this.state.users];
+
+    copy = copy.filter(u => copy[index] !== u);
+
+    this.setState({
+      users: copy
+    });
+  };
+
   render() {
-    const {users, isFetching} = this.state;
+    const { users, isFetching } = this.state;
     return (
       <div className="App">
-       
-        <UserList users={users} isFetching={isFetching} />
+        <UserList
+          users={users}
+          isFetching={isFetching}
+          onDelete={this.onDelete}
+        />
       </div>
     );
   }
 }
 
-export default App
+export default App;
 
- // <JumbotronFluid
- //          heading="User CRUD"
- //          lead="Using an API for User CRUD operations"
- //        />
+// <JumbotronFluid
+//          heading="User CRUD"
+//          lead="Using an API for User CRUD operations"
+//        />

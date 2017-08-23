@@ -1,7 +1,7 @@
 import React from "react";
 
-const UserCard = ({ user }) => {
-  const { first_name, last_name, avatar } = user;
+const UserCard = ({ user, editFlag, selectedUserID }) => {
+  const { first_name, last_name, avatar, id } = user;
 
   console.log(first_name, last_name, "get here?");
 
